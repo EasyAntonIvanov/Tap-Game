@@ -22,12 +22,14 @@ const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id ||
 
 // Конфигурация Firebase (ЗАМЕНИТЕ НА СВОЮ!)
 const firebaseConfig = {
-    apiKey: "AIzaSyABCD1234...",
-    authDomain: "your-project.firebaseapp.com",
-    databaseURL: "https://your-project.firebaseio.com",
-    projectId: "your-project-id",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "1234567890"
+  apiKey: "AIzaSyAer14dtHsoZZOtyQeCa5J7AoS8oEsSkSw",
+  authDomain: "tap-game-easy.firebaseapp.com",
+  databaseURL: "https://tap-game-easy-default-rtdb.firebaseio.com",
+  projectId: "tap-game-easy",
+  storageBucket: "tap-game-easy.firebasestorage.app",
+  messagingSenderId: "97724951543",
+  appId: "1:97724951543:web:3244cdd53f711ae894dcf2",
+  measurementId: "G-0Y1PS1GK0J"
 };
 
 // Инициализация Firebase
@@ -89,7 +91,7 @@ tapBtn.addEventListener('click', () => {
     // 1. Воспроизведение звука
     tapSound.currentTime = 0;
     tapSound.play().catch(e => console.log("Sound error:", e));
-    
+  
     // 2. Обновление счетчика
     clicks++;
     counter.textContent = clicks;
@@ -100,9 +102,9 @@ tapBtn.addEventListener('click', () => {
     setTimeout(() => counter.classList.remove('counter-update'), 300);
     
     // 4. Сохранение в Firebase (если подключен)
-    if (firebase.apps.length) {
-        saveResult();
-    }
+    database.ref('players/' + userId).set({
+    name: Telegram.WebApp.initDataUnsafe.user?.first_name || 'Аноним',
+    clicks: clicks);
     
     // 5. Дополнительная анимация кнопки
     tapBtn.style.transform = 'scale(0.95)';
