@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <audio id="tap-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" preload="auto"></audio>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тапалка</title>
@@ -12,6 +13,15 @@
         <p>Кликов: <span id="counter">0</span></p>
         <button id="tap-btn">Тык</button>
     </div>
+    <!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+
+<!-- Блок рейтинга (добавьте в <body>) -->
+<div class="leaderboard">
+    <h2>🏆 Топ игроков</h2>
+    <ol id="top-players"></ol>
+</div>
     <script src="app.js"></script>
 </body>
 </html>

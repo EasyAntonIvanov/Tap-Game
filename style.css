@@ -30,3 +30,39 @@ body {
 #tap-btn:hover {
     background: #45a049;
 }
+/* Анимация кнопки */
+@keyframes tapAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+}
+
+#tap-btn:active {
+    animation: tapAnimation 0.1s ease;
+    background: #3d8b40 !important;
+}
+
+/* Анимация счетчика */
+@keyframes counterBounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.5); }
+    100% { transform: scale(1); }
+}
+
+.counter-update {
+    animation: counterBounce 0.3s ease;
+    color: #4CAF50;
+}
+
+/* Стили для рейтинга */
+.leaderboard {
+    margin-top: 20px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+#top-players li {
+    text-align: left;
+    padding: 5px;
+}
