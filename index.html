@@ -1,27 +1,190 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <audio id="tap-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" preload="auto"></audio>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тапалка</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Тапалка Turbo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f8ff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        #counter {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #4CAF50;
+            display: inline-block;
+            min-width: 60px;
+        }
+
+        #tap-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        #tap-btn:hover {
+            background: #45a049;
+        }
+
+        #tap-btn:active {
+            animation: tapAnimation 0.1s ease;
+            background: #3d8b40 !important;
+        }
+
+        .leaderboard {
+            margin-top: 30px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        .leaderboard h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        #top-players {
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        #top-players li {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        @keyframes tapAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes counterBounce {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1); }
+        }
+
+        .counter-update {
+            animation: counterBounce 0.3s ease;
+            color: #2ecc71;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Тапалка!</h1>
+        <h1>🔥 Тапалка Turbo</h1>
         <p>Кликов: <span id="counter">0</span></p>
-        <button id="tap-btn">Тык</button>
+        <button id="tap-btn">ТЫКНИ МЕНЯ!</button>
+        
+        <div class="leaderboard">
+            <h2>🏆 Топ игроков</h2>
+            <ol id="top-players"></ol>
+        </div>
     </div>
-    <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
 
-<!-- Блок рейтинга (добавьте в <body>) -->
-<div class="leaderboard">
-    <h2>🏆 Топ игроков</h2>
-    <ol id="top-players"></ol>
-</div>
-    <script src="app.js"></script>
+    <!-- Звук клика -->
+    <audio id="tap-sound" src="https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3" preload="auto"></audio>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+    
+    <script>
+        // Инициализация Firebase (ЗАМЕНИТЕ эти данные на свои!)
+        const firebaseConfig = {
+            apiKey: "AIzaSyABCD...",
+            authDomain: "your-project.firebaseapp.com",
+            databaseURL: "https://your-project.firebaseio.com",
+            projectId: "your-project",
+            storageBucket: "your-project.appspot.com",
+            messagingSenderId: "1234567890"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Элементы интерфейса
+        const tapBtn = document.getElementById('tap-btn');
+        const counter = document.getElementById('counter');
+        const tapSound = document.getElementById('tap-sound');
+        
+        // Данные игрока
+        let clicks = localStorage.getItem('clicks') || 0;
+        counter.textContent = clicks;
+        
+        const userId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 
+                     'guest_' + Math.random().toString(36).substr(2, 9);
+
+        // Обновление рейтинга
+        function updateLeaderboard() {
+            database.ref('players').orderByChild('clicks').limitToLast(10).on('value', (snapshot) => {
+                const players = [];
+                snapshot.forEach(child => players.push(child.val()));
+                
+                players.sort((a, b) => b.clicks - a.clicks);
+                
+                document.getElementById('top-players').innerHTML = players
+                    .map(p => `<li>${p.name || 'Аноним'}: ${p.clicks} 👆</li>`)
+                    .join('');
+            });
+        }
+
+        // Обработчик клика
+        tapBtn.addEventListener('click', () => {
+            // Звук
+            tapSound.currentTime = 0;
+            tapSound.play();
+            
+            // Анимация
+            counter.classList.add('counter-update');
+            setTimeout(() => counter.classList.remove('counter-update'), 300);
+            
+            // Счётчик
+            clicks++;
+            counter.textContent = clicks;
+            localStorage.setItem('clicks', clicks);
+            
+            // Сохранение в Firebase
+            database.ref('players/' + userId).set({
+                name: window.Telegram?.WebApp?.initDataUnsafe?.user?.first_name || 'Аноним',
+                clicks: clicks
+            });
+        });
+
+        // Первая загрузка рейтинга
+        updateLeaderboard();
+    </script>
 </body>
 </html>

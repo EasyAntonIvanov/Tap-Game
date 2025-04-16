@@ -1,48 +1,113 @@
+/* Основные стили */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     background: #f0f8ff;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    padding: 20px;
+    color: #2c3e50;
 }
 
+/* Контейнер приложения */
 .container {
     text-align: center;
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
 }
 
+/* Заголовок */
+h1 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+/* Счётчик */
+#counter {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #4CAF50;
+    display: inline-block;
+    min-width: 60px;
+    transition: color 0.3s;
+}
+
+/* Кнопка тапа */
 #tap-btn {
     background: #4CAF50;
     color: white;
     border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 5px;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 8px;
     cursor: pointer;
-    margin-top: 10px;
+    margin: 20px 0;
+    transition: all 0.2s;
+    width: 100%;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 #tap-btn:hover {
     background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
-/* Анимация кнопки */
+
+/* Таблица лидеров */
+.leaderboard {
+    margin-top: 30px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    width: 100%;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.leaderboard h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    font-size: 1.3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+#top-players {
+    text-align: left;
+    padding-left: 20px;
+    list-style-type: none;
+    margin: 15px 0 0 0;
+}
+
+#top-players li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+}
+
+#top-players li:last-child {
+    border-bottom: none;
+}
+
+/* Анимации */
 @keyframes tapAnimation {
     0% { transform: scale(1); }
     50% { transform: scale(0.9); }
     100% { transform: scale(1); }
 }
 
-#tap-btn:active {
-    animation: tapAnimation 0.1s ease;
-    background: #3d8b40 !important;
-}
-
-/* Анимация счетчика */
 @keyframes counterBounce {
     0% { transform: scale(1); }
     50% { transform: scale(1.5); }
@@ -51,18 +116,38 @@ body {
 
 .counter-update {
     animation: counterBounce 0.3s ease;
-    color: #4CAF50;
+    color: #2ecc71 !important;
 }
 
-/* Стили для рейтинга */
-.leaderboard {
-    margin-top: 20px;
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
+#tap-btn:active {
+    animation: tapAnimation 0.1s ease;
+    background: #3d8b40 !important;
 }
 
-#top-players li {
-    text-align: left;
-    padding: 5px;
+/* Адаптация для мобильных */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 15px;
+    }
+    
+    h1 {
+        font-size: 1.5em;
+    }
+    
+    #tap-btn {
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+    
+    #counter {
+        font-size: 2em;
+    }
+}
+
+/* Эффект при наведении на игроков в рейтинге */
+#top-players li:hover {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 4px;
+    padding-left: 10px;
+    transition: all 0.2s;
 }
